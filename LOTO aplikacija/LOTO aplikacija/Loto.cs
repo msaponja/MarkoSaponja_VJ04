@@ -24,12 +24,12 @@ namespace LOTO_aplikacija
 
         }
         // Metoda koja nakon provjere unosi brojeve u korisnicku listu vrijednosti, odnosno uplacenih brojeva
-        public bool UnesiUplaceneBrojeve(List<string> vrijednosti) 
+        public bool UnesiUplaceneBrojeve(List<string> korisnickeVrijednosti) 
         {
             bool ispravni = false;
             UplaceniBrojevi.Clear();
 
-            foreach (string v in vrijednosti)
+            foreach (string v in korisnickeVrijednosti)
             {
                 int broj = 0;
                 if (int.TryParse(v, out broj) == true)
@@ -67,6 +67,7 @@ namespace LOTO_aplikacija
                     DobitniBrojevi.Add(broj);
                 }
             }
+            DobitniBrojevi.Sort();
         
         }
         /// <summary>
