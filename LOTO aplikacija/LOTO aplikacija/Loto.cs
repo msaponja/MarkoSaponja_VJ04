@@ -11,63 +11,84 @@ namespace LOTO_aplikacija
 {
     class Loto
     {
-        public List<int> izvuceniBrojevi { get; set;}
-        public List<int> odigraniBrojevi { get;set; }
-        public Loto() {}
-        
+        public List<int> UplaceniBrojevi { get; set;}
+        public List<int> DobitniBrojevi { get; set;}
 
-            
-        public void izbacivanjeBrojeva(FrmLoto forma) 
+        // Konstruktor klase
+
+        public Loto()
         {
 
-            Random r = new Random();
-            int broj;            
-            for (int i = 0; i < 7; i++)
-            {
-                broj = r.Next(1, 39);
-                if (izvuceniBrojevi.Contains(broj))
-                {
-                    i--;
-                }
-                else
-                {
-                    izvuceniBrojevi.Add(broj);
-                }
-            }
-            forma.textBox1.Text = izvuceniBrojevi[0].ToString();
-            forma.textBox2.Text = izvuceniBrojevi[1].ToString();
-            forma.textBox3.Text = izvuceniBrojevi[2].ToString();
-            forma.textBox4.Text = izvuceniBrojevi[3].ToString();
-            forma.textBox5.Text = izvuceniBrojevi[4].ToString();
-            forma.textBox6.Text = izvuceniBrojevi[5].ToString();
-            forma.textBox9.Text = izvuceniBrojevi[6].ToString();
-        
+            UplaceniBrojevi = new List<int>();
+            DobitniBrojevi = new List<int>();
+
         }
-        public void provjeraDobitka(FrmLoto forma) 
+        // Metoda koja nakon provjere unosi brojeve u korisnicku listu vrijednosti, odnosno uplacenih brojeva
+        public bool UnesiUplaceneBrojeve(List<string> vrijednosti) 
         {
-            int a,b,c,d,e,f,g;
-            a = int.Parse(forma.textBox14.Text);
-            b = int.Parse(forma.textBox13.Text);
-            c = int.Parse(forma.textBox12.Text);
-            d = int.Parse(forma.textBox11.Text);
-            e = int.Parse(forma.textBox10.Text);
-            f = int.Parse(forma.textBox8.Text);
-            g = int.Parse(forma.textBox7.Text);
-            odigraniBrojevi.Add(a);
-            odigraniBrojevi.Add(b);
-            odigraniBrojevi.Add(c);
-            odigraniBrojevi.Add(d);
-            odigraniBrojevi.Add(e);
-            odigraniBrojevi.Add(f);
-            odigraniBrojevi.Add(g);
-            foreach (int zbroj in odigraniBrojevi)
+            bool ispravni = false;
+            UplaceniBrojevi.Clear();
+
+            foreach (string v in vrijednosti)
             {
-                if (izvuceniBrojevi.Contains(zbroj))
+                int broj = 0;
+                if (int.TryParse(v, out broj) == true)
                 {
-                    forma.label1.Text = zbroj.ToString() + ",";
+
+                    if (broj >= 1 && broj <= 39)
+                    {
+                        if (UplaceniBrojevi.Contains(broj) == false)
+                        {
+                            UplaceniBrojevi.Add(broj);
+                        }
+                    }
+
+                }
+            }
+            if (UplaceniBrojevi.Count==7)
+            {
+                ispravni = true;
+            }
+            return ispravni;
+	   }
+        /// <summary>
+        /// Generator nasumičnih brojevau rasponu od 1 do 39
+        /// </summary>
+        public void GenerirajDobitnuKombinaciju() 
+        {
+
+            DobitniBrojevi.Clear();
+            Random generatorBrojeva = new Random();
+            while (DobitniBrojevi.Count < 7)
+            {
+                int broj = generatorBrojeva.Next(1, 39);
+                if (DobitniBrojevi.Contains(broj)==false)
+                {
+                    DobitniBrojevi.Add(broj);
                 }
             }
         
         }
+        /// <summary>
+        /// Izračunava broj pogođenih brojeva
+        /// </summary>
+        /// <returns>Broj pogođenih brojeva
+        public int IzracunBrojPogodaka() 
+        {
+
+            int brojPogodaka= 0;
+            foreach (int broj in UplaceniBrojevi)
+            {
+                if (DobitniBrojevi.Contains(broj)==true)
+                {
+                    brojPogodaka++;
+                }
+            }
+            return brojPogodaka;
+        
+        }
+
+
+ 
     }
 }
